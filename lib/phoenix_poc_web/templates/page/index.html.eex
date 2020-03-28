@@ -1,0 +1,53 @@
+<section class="phx-hero">
+  <h1>toggl in prijatelji</h1>
+  <p>mix 'em all up and hope it's OK</p>
+</section>
+
+<%# <section class="row">
+  <article class="column">
+    <h2>Resources</h2>
+    <ul>
+      <li>
+        <a href="https://hexdocs.pm/phoenix/overview.html">Guides &amp; Docs</a>
+      </li>
+    </ul>
+  </article>
+  <article class="column">
+    <h2>Help</h2>
+    <ul>
+      <li>
+        <a href="https://elixirforum.com/c/phoenix-forum">Forum</a>
+      </li>
+    </ul>
+  </article>
+</section> %>
+<%= form_for @conn, Routes.page_path(@conn, :process_form), fn f -> %>
+<section class="row">
+  <%# <article><h2>Settings:</h2><article> %>
+  <article class="column">
+    <h3>Toggle API token</h3>
+    <div>
+      <%=
+      label do
+        text_input f, :toggl_api_token, ["placeholder": "enter the token"]
+      end
+       %>
+      <%# <label for="toggl_api_token">API token:</label> %>
+      <%# <%= text_input f, :toggl_api_token %>
+      <%# <input name="toggl_api_token" type="text" placeholder="ur toggl api token" /> %>
+    </div>
+  </article>
+  <article class="column">
+    <h3>Period</h3>
+    <div><label for="date_from">Start date:</label><input name="date_from" type="date" /></div>
+    <div><label for="date_to">End date:</label><input name="date_to" type="date" /></div>
+  </article>
+</section>
+<section class="row">
+<%= submit "GO" %>
+</section>
+<% end %>
+
+<section class="row">
+<article><h2>Entries:</h2><article>
+</section>
