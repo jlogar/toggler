@@ -70,7 +70,7 @@ defmodule TogglerCli do
 
         tt_project_task =
           with {:ok, tt_project} <- get_tt_project(project, tt_projects),
-               {:ok, tt_task} = get_tt_task(project, tt_tasks) do
+               {:ok, tt_task} <- get_tt_task(project, tt_tasks) do
             {:ok, {tt_project, tt_task}}
           end
 
