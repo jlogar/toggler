@@ -96,16 +96,15 @@ defmodule TogglerCli.Timetracker do
         script,
         capture: :all_names
       )
-      |> Enum.map(fn [id, name] -> [id: id, name: name] end)
+      |> Enum.map(fn [id, name] -> {id, name} end)
 
-    # TODO gotta array indexes too!
     tasks =
       Regex.scan(
         ~r/task_names\[(?<task_index>(\d)*)\](\s)?=(\s)?\"(?<task_name>(\d)+ - (.)+)\";/,
         script,
         capture: :all_names
       )
-      |> Enum.map(fn [index, name] -> %{:index => index, :name => name} end)
+      |> Enum.map(fn [index, name] -> {index, name} end)
 
     {projects, tasks}
   end
