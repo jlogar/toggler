@@ -9,10 +9,12 @@ defmodule TogglerCli do
     Logger.debug("projects mapping size: #{map_size(projects)}")
     Logger.debug("taks mapping size: #{map_size(tasks)}")
 
+    # the query is exclusive, so must have 1 day more in the range
+    last_day_plus_1 = Date.add(last_day, 1)
     f_midnight = DateTime.new!(first_day, ~T[00:00:00], "Etc/UTC")
-    l_midnight = DateTime.new!(last_day, ~T[00:00:00], "Etc/UTC")
+    l_midnight = DateTime.new!(last_day_plus_1, ~T[00:00:00], "Etc/UTC")
 
-    dates = Date.range(first_day, last_day)
+    dates = Date.range(first_day, last_day_plus_1)
     Logger.info("Getting projects from toggl...")
 
     {:ok, toggl_projects} =
@@ -30,7 +32,7 @@ defmodule TogglerCli do
 
     Logger.debug(
       toggl_entries
-      |> Enum.map(&"[[#{&1["id"]}]]: #{&1["description"]}")
+      |> Enum.map(&"[[#{&1["id"]}]]: #{&1["description"]}, start: #{&1["start"]}")
       |> Enum.join("\n")
     )
 
@@ -60,9 +62,9 @@ defmodule TogglerCli do
       } previously synced & #{length(new_entries)} to sync."
     )
 
-    Logger.info("Mapping to form keyw. maps...")
+    Logger.info("Mapping to form key maps...")
 
-    _form_maps =
+    form_maps =
       new_entries
       |> Enum.map(fn t_entry ->
         pid = t_entry["pid"]
@@ -76,6 +78,9 @@ defmodule TogglerCli do
 
         map_to_form(tt_project_task, t_entry)
       end)
+
+    form_maps
+    |> Enum.each(fn e -> Timetracker.push_new_entry(cookies, e) end)
   end
 
   defp map_to_form({:ok, {tt_project, tt_task}}, t_entry) do

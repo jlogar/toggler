@@ -4,7 +4,7 @@ defmodule TogglerCli.App do
   def main(args) do
     options_def = [strict: [date: :string, dry_run: :boolean]]
 
-    {options, argv, errors} = OptionParser.parse(args, options_def)
+    {options, _argv, _errors} = OptionParser.parse(args, options_def)
     # IO.inspect(args, label: "CLI args")
 
     # IO.puts(:stdio, "args: #{argv}")
@@ -14,7 +14,6 @@ defmodule TogglerCli.App do
 
     # IO.inspect(errors, label: "errors")
     # IO.inspect(argv, label: "argv")
-    # IO.puts(:stdio, TogglerCli.hello())
     # expect input in the form "2020-11"
     [year, month] = options[:date] |> String.split("-")
     {iyear, _} = Integer.parse(year)
